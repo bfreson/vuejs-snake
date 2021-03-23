@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style scoped>
-.score {
+/* .score {
     font-size:1.2rem !important;
-}
+} */
 </style>

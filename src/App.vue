@@ -5,16 +5,22 @@
      <h1> VueJS - Snake</h1>
   </div>
   <GameStatus/>
+  <Scene :width="650" :height="650" :borderColor="{r:0, g:0, b:255}" :borderWidth="15"/>
+ 
    </div>
 
 </template>
 
 <script>
 import GameStatus from '@/components/GameStatus.vue';
+import Scene from '@/components/Scene.vue';
+
 
 export default {
   components: {
-   GameStatus
+   GameStatus,
+   Scene,
+
   },
   data() {
     return {
@@ -38,11 +44,10 @@ export default {
 </script>
 
 <style>
-/* * {
-  margin:0;
-  padding:0;
-  box-sizing: border-box;
-} */
+* {
+  padding: 0 0 0 0 !important;
+  margin: 0 0 0 0 !important;
+}
 body{
   width: 100%;
   height: 100vh;
@@ -60,8 +65,8 @@ body{
 }
 
 .display {
-  width:800px;
-
+  width:650px;
+   font-size:1rem !important;
 
   /* position: relative;
   display: inline-block; */
