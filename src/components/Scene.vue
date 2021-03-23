@@ -7,8 +7,6 @@
       top: `${borderWidth}px`,
       left: `${borderWidth}px`,
     }" class="board">
-
-
     </div>
      <Grid :width="board.width" :height="board.height" :top="grid.top" :left="grid.left"/>
 
@@ -57,17 +55,8 @@ export default {
 
 <style>
 
-
-/* .scene {
-
-    background-color: rgb(202, 202, 46);
-} */
 .board {
-    /* width:600px;
-    height:600px; */
     background-color: black;
     position: relative;
-    /* top: 25px;
-    left: 25px; */
 }
 </style>

@@ -67,9 +67,6 @@ body{
 .display {
   width:650px;
    font-size:1rem !important;
-
-  /* position: relative;
-  display: inline-block; */
   font-family: pokemon;
 }
 </style>
