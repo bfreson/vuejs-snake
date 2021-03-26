@@ -5,7 +5,7 @@
      <h1> VueJS - Snake</h1>
   </div>
   <GameStatus/>
-  <Scene :width="650" :height="650" :borderColor="{r:0, g:0, b:255}" :borderWidth="15"/>
+  <Scene :width="board.width" :height="board.height" :borderColor="{r:0, g:0, b:255}" :borderWidth="15"/>
  
    </div>
 
@@ -14,22 +14,22 @@
 <script>
 import GameStatus from '@/components/GameStatus.vue';
 import Scene from '@/components/Scene.vue';
-
+import {mapState} from 'vuex'
 
 export default {
   components: {
    GameStatus,
    Scene,
-
   },
   data() {
     return {
-     
-      
+           
     };
   },
   computed: {
-  
+    ...mapState({
+        board: state => state.board
+  }),
   },
   watch: {
    

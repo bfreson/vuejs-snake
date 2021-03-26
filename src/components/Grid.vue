@@ -2,14 +2,14 @@
   <div :style="{
        width: `${width}px`,
        height: `${height}px`,
-      top: `${top}px`,
-      left: `${left}px`,
+       top: `${top}px`,
+       left: `${left}px`,
     }"  class="grid">
-    <div class="row" v-for="y in gridHeight" :key="`row${y}`">
+    <div class="row" v-for="y in board.rows" :key="`row${y}`">
       <div  :style="{
       width: `${square.width}px`,
       height: `${square.height}px`,
-    }" class="square" v-for="x in gridWidth" :key="`square${x}-${y}`">
+    }" class="square" v-for="x in board.columns" :key="`square${x}-${y}`">
         {{ y }}/{{ x }}
       </div>
     </div>
@@ -17,21 +17,24 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'Grid',
   data() {
     return {
-      gridWidth: 40,
-      gridHeight: 40,
      
     };
   },
   computed:
   {
+    ...mapState({
+        board: state => state.board
+  }),
       square()
       {
-           let width = this.width/this.gridWidth;
-            let height = this.height/this.gridHeight;
+           let width = this.width / this.board.columns;
+           let height = this.height / this.board.rows;
           return {
             width,height
           };
@@ -44,7 +47,6 @@ export default {
       height: Number,
       top:Number,
       left:Number,
-
   }
 };
 </script>
@@ -62,7 +64,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 4px;
+  font-size: 8px;
 }
 
 .square {

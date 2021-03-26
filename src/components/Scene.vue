@@ -1,24 +1,17 @@
 <template>
 <div :style="sceneStyle" class="scene">
 
-    <div :style="{
-      width: `${board.width}px`,
-      height: `${board.height}px`,
-      top: `${borderWidth}px`,
-      left: `${borderWidth}px`,
-    }" class="board">
-    </div>
-     <Grid :width="board.width" :height="board.height" :top="grid.top" :left="grid.left"/>
+    <Boardgame :width="board.width" :height="board.height" :top="board.top" :left="board.left"/>
 
 </div>
     
 </template>
 
 <script>
-import Grid from '@/components/Grid.vue';
+import Boardgame from '@/components/Boardgame.vue';
 export default {
   components: {
-   Grid
+   Boardgame
   },
   computed:
   {
@@ -33,7 +26,9 @@ export default {
       {
           let width = this.width -(2*this.borderWidth);
           let height = this.height -(2*this.borderWidth);
-          return {width,height};
+          let top = this.borderWidth;
+          let left = this.borderWidth;
+          return {width,height,top,left};
       }
       ,
       grid()
