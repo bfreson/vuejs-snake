@@ -5,19 +5,19 @@
        top: `${top}px`,
        left: `${left}px`,
     }"  class="grid">
-    <div class="row" v-for="y in board.rows" :key="`row${y}`">
+    <div class="row" v-for="y in rows" :key="`row${y}`">
       <div  :style="{
       width: `${square.width}px`,
       height: `${square.height}px`,
-    }" class="square" v-for="x in board.columns" :key="`square${x}-${y}`">
-        {{ y }}/{{ x }}
+    }" class="square" v-for="x in columns" :key="`square${x}-${y}`">
+        <!-- {{ y }}/{{ x }} -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'Grid',
@@ -28,18 +28,9 @@ export default {
   },
   computed:
   {
-    ...mapState({
-        board: state => state.board
-  }),
-      square()
-      {
-           let width = this.width / this.board.columns;
-           let height = this.height / this.board.rows;
-          return {
-            width,height
-          };
-       
-      }
+    ...mapState(['columns','rows']),
+    ...mapGetters(['square']),
+      
   },
   props:
   {
@@ -65,10 +56,9 @@ export default {
   justify-content: center;
   align-items: center;
   font-size: 8px;
-}
-
-.square {
-  border: solid white 1px;
+    border: solid white 1px;
   color:white;
 }
+
+
 </style>

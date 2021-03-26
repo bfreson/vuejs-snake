@@ -21,7 +21,7 @@ export default {
   computed:
   {
      ...mapState({
-        grid_visible: state => state.board.grid_visible
+        grid_visible: state => state.grid_visible
   }),
    },
    props:

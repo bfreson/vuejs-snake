@@ -1,11 +1,11 @@
 <template>
 
-<div class="display"> 
+<div :width="width" class="display"> 
   <div class="title py-3">
      <h1> VueJS - Snake</h1>
   </div>
   <GameStatus/>
-  <Scene :width="board.width" :height="board.height" :borderColor="{r:0, g:0, b:255}" :borderWidth="15"/>
+  <Scene  :borderColor="{r:0, g:0, b:255}" />
  
    </div>
 
@@ -27,9 +27,7 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-        board: state => state.board
-  }),
+    ...mapState(['width','height','borderWidth']),
   },
   watch: {
    
@@ -65,7 +63,7 @@ body{
 }
 
 .display {
-  width:650px;
+
    font-size:1rem !important;
   font-family: pokemon;
 }

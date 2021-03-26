@@ -1,7 +1,7 @@
 <template>
 <div :style="sceneStyle" class="scene">
 
-    <Boardgame :width="board.width" :height="board.height" :top="board.top" :left="board.left"/>
+    <Boardgame :width="board.width" :height="board.height" :top="borderWidth" :left="borderWidth"/>
 
 </div>
     
@@ -9,12 +9,16 @@
 
 <script>
 import Boardgame from '@/components/Boardgame.vue';
+import {mapState,mapGetters} from 'vuex';
+
 export default {
   components: {
    Boardgame
   },
   computed:
   {
+      ...mapState(['width','height','borderWidth']),
+      ...mapGetters(['board']),
       sceneStyle() {
         return {
             width: `${this.width}px`,
@@ -22,27 +26,11 @@ export default {
             'background-color' : `rgb(${this.borderColor.r}, ${this.borderColor.g}, ${this.borderColor.b})`,
         };
     },
-      board()
-      {
-          let width = this.width -(2*this.borderWidth);
-          let height = this.height -(2*this.borderWidth);
-          let top = this.borderWidth;
-          let left = this.borderWidth;
-          return {width,height,top,left};
-      }
-      ,
-      grid()
-      {
-          let top = 0 +this.borderWidth - this.board.width;
-          let left = this.borderWidth;
-           return {top,left};
-      }
+   
+      
   },
   props:
   {
-      width:Number,
-      height:Number,
-      borderWidth: Number,
       borderColor: Object
   }
 }
