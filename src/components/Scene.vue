@@ -29,7 +29,7 @@ export default {
         };
      },
      displayMenu() {
-         return this.game_status === "None";
+         return this.game_status !== "Running";
      }
    
       

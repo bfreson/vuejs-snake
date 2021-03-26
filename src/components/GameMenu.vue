@@ -6,8 +6,9 @@
       top: '0px',
       left: '0px'
     }" class="start">
-    <div class="action" @click="startNewgame">
-        Start new game
+    <div :style="{'background-color': menu.color
+    }" class="action" @click="startNewgame">
+        {{this.menu.message}}
     </div>
 </div>
 
@@ -26,7 +27,24 @@ export default {
     };
   },
   computed: {
-    ...mapState(['width','height']),
+    ...mapState(['width','height','game_status']),
+    menu()
+    {
+        switch (this.game_status)
+        {
+           case 'GameOver':
+            return {
+              message : "Game Over :(",
+              color : "red"
+            }
+          default:
+            return {
+              message : "Start new game",
+              color : "orange"
+            }
+        }
+      
+    }
   },
   watch: {
    
@@ -57,7 +75,6 @@ export default {
 }
 .action{
     cursor:pointer;
-    background-color: orange;
     width:min-content;
     overflow:hidden;
     white-space: nowrap;

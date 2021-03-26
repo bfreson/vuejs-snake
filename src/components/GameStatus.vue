@@ -12,8 +12,6 @@
 </div>
 </div>
 
-
-
 </template>
 
 <script>
@@ -30,7 +28,5 @@ export default {
 </script>
 
 <style scoped>
-/* .score {
-    font-size:1.2rem !important;
-} */
+
 </style>
