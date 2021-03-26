@@ -26,11 +26,11 @@ export default {
      
     };
   },
+  
   computed:
   {
     ...mapState(['columns','rows']),
     ...mapGetters(['square']),
-      
   },
   props:
   {
@@ -56,7 +56,7 @@ export default {
   justify-content: center;
   align-items: center;
   font-size: 8px;
-    border: solid white 1px;
+  border: solid white 1px;
   color:white;
 }
 

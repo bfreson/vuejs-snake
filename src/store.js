@@ -10,10 +10,10 @@ export default new Vuex.Store({
         borderWidth: 15,
         width: 650,
         height: 650,
-        columns: 16,
-        rows: 16,
-        grid_visible: true,
-
+        columns: 32,
+        rows: 32,
+        grid_visible: false,
+        game_status: 'None',
         snake: {
             orientation: 'right',
             location: []
@@ -49,9 +49,10 @@ export default new Vuex.Store({
     },
 
     actions: {
-        initSnake({ commit, state }) {
-            let columns = state.board.columns / 2 + 2;
-            let row = state.board.rows / 2;
+
+        startNewGame({ commit, state }) {
+            let columns = state.columns / 2 + 1;
+            let row = state.rows / 2;
 
             let snake_location = [
                 [columns, row],
@@ -59,6 +60,7 @@ export default new Vuex.Store({
                 [columns - 2, row],
                 [columns - 3, row]
             ];
+            commit('SET_GAME_STATUS', 'running');
             commit('SET_SNAKE_LOCATION', snake_location);
         }
     },
@@ -67,10 +69,13 @@ export default new Vuex.Store({
             Vue.set(state, 'current_score', current_score);
         },
         SET_GRID_VISIBLE(state, grid_visible) {
-            Vue.set(state, 'board.grid_visible', grid_visible);
+            Vue.set(state, 'grid_visible', grid_visible);
         },
         SET_SNAKE_LOCATION(state, snake_location) {
-            Vue.set(state, 'snake.location', grid_visible);
+            Vue.set(state.snake, 'location', snake_location);
+        },
+        SET_GAME_STATUS(state, game_status) {
+            Vue.set(state, 'game_status', game_status);
         },
     },
 });

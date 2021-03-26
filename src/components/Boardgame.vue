@@ -6,23 +6,28 @@
       left: `${left}px`,
     }" class="board">
      <Grid v-show="grid_visible" :width="width" :height="height" :top="0" :left="0"/>
-
+     <Snake v-show="displaySnake" :width="width" :height="height" :top="0" :left="0"/>
 </div>
     
 </template>
 
 <script>
 import Grid from '@/components/Grid.vue';
+import Snake from '@/components/Snake.vue';
 import { mapState } from 'vuex'
 export default {
   components: {
-   Grid
+   Grid,
+   Snake
   },
   computed:
   {
      ...mapState({
         grid_visible: state => state.grid_visible
   }),
+   displaySnake() {
+         return this.game_status !== "None";
+     }
    },
    props:
   {
@@ -37,6 +42,6 @@ export default {
 <style>
 .board {
     background-color: black;
-    position: relative;
+    position: absolute;
 }
 </style>
