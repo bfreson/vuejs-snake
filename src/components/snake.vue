@@ -1,5 +1,5 @@
 <template>
-<div  v-show="snake_squares!==undefined" :style="{
+<div   :style="{
        width: `${width}px`,
        height: `${height}px`,
        top: `${top}px`,
@@ -50,9 +50,7 @@ export default {
     {
         if(this.snake.location.length > 0)
         {
-            let ret = this.snake.location.map((item, index) => {  return this.getSnakeSquare(index,item[0],item[1]);  });
-            console.log(ret);
-            return ret;
+            return this.snake.location.map((item, index) => {  return this.getSnakeSquare(index,item[0],item[1]);  });
         }
          return null;
 

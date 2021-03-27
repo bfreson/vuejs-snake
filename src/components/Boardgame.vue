@@ -11,7 +11,8 @@
         v-on:keydown.right="move('Right')"
     >
      <Grid v-show="grid_visible" :width="width" :height="height" :top="0" :left="0"/>
-     <Snake v-show="displaySnake" :width="width" :height="height" :top="0" :left="0"/>
+     <Snake v-show="gameLaunched" :width="width" :height="height" :top="0" :left="0"/>
+     <Egg v-show="gameLaunched" :width="width" :height="height" :top="0" :left="0"/>
 </div>
     
 </template>
@@ -19,11 +20,13 @@
 <script>
 import Grid from '@/components/Grid.vue';
 import Snake from '@/components/Snake.vue';
+import Egg from '@/components/Egg.vue';
 import { mapState } from 'vuex'
 export default {
   components: {
    Grid,
-   Snake
+   Snake,
+   Egg
   },
   data () {
 	return {
@@ -41,7 +44,6 @@ methods: {
 	    clearInterval(this.interval)
 	},
     move(orientation) {
-         console.log(orientation);
          if(this.$store.state.game_status !== "Running") return;
          this.$store.commit('SET_SNAKE_ORIENTATION', orientation);
     },
@@ -55,7 +57,7 @@ beforeDestroy () {
      ...mapState({
         grid_visible: state => state.grid_visible
   }),
-   displaySnake() {
+   gameLaunched() {
          return this.game_status !== "None";
      }
    },

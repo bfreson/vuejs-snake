@@ -18,6 +18,10 @@ function isValidOrientation(currentOrientation, newOrientation) {
     }
 }
 
+function isSnakeIsAtLocation(snakeLocations, location) {
+    return snakeLocations.filter(loc => loc[0] == location[0] && loc[1] == location[1]).length > 0;
+}
+
 function isValidLocation(columns, rows, snakeLocations, location) {
     if (location[0] <= 0 || location[0] > columns ||
         location[1] <= 0 || location[1] > rows)
@@ -25,7 +29,30 @@ function isValidLocation(columns, rows, snakeLocations, location) {
 
     if (snakeLocations.length === 0) return true;
 
-    return !snakeLocations.filter(loc => loc[0] == location[0] && loc[1] == location[1]).length > 0;
+    return !isSnakeIsAtLocation(snakeLocations, location);
+}
+
+function randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function getNewRandomEggLocation(columns, rows, snakeLocations) {
+    if (snakeLocations.length >= (columns * rows) - 2)
+        return null;
+
+    let column = 0;
+    let row = 0;
+
+    let ok = false;
+
+    do {
+        column = randomIntFromInterval(1, columns);
+        row = randomIntFromInterval(1, rows);
+
+        ok = !isSnakeIsAtLocation(snakeLocations, [column, row]);
+    } while (!ok);
+
+    return [column, row];
 }
 
 export default new Vuex.Store({
@@ -35,14 +62,17 @@ export default new Vuex.Store({
         borderWidth: 15,
         width: 650,
         height: 650,
-        columns: 32,
-        rows: 32,
+        columns: 6,
+        rows: 6,
         grid_visible: false,
         game_status: 'None',
         snake: {
             orientation: 'Right',
             location: [],
             growing: false
+        },
+        egg: {
+            location: null
         }
 
     },
@@ -90,11 +120,11 @@ export default new Vuex.Store({
             commit('SET_CURRENT_SCORE', 0);
             commit('RESET_SNAKE_ORIENTATION');
             commit('SET_SNAKE_LOCATION', snake_location);
+            commit('SET_EGG_LOCATION', getNewRandomEggLocation(state.columns, state.rows, state.snake.location));
             commit('SET_GAME_STATUS', 'Running');
 
-
         },
-        moveSnake({ commit, state }) {
+        moveSnake({ commit, state, dispatch }) {
             if (state.snake.location.length === 0) return;
 
             var nextHeadLocation = {...state.snake.location[0] };
@@ -128,11 +158,18 @@ export default new Vuex.Store({
 
             commit('SET_SNAKE_LOCATION', snake_location);
 
+            if (state.egg.location != null && nextHeadLocation[0] == state.egg.location[0] && nextHeadLocation[1] == state.egg.location[1]) {
+                dispatch('snakeGrows');
+            }
+
+
         },
         snakeGrows({ commit, state }) {
             commit('SET_SNAKE_GROWING', true);
             commit('SET_CURRENT_SCORE', state.current_score + 1);
-        }
+            commit('SET_EGG_LOCATION', getNewRandomEggLocation(state.columns, state.rows, state.snake.location));
+        },
+
     },
     mutations: {
         SET_CURRENT_SCORE(state, current_score) {
@@ -154,6 +191,9 @@ export default new Vuex.Store({
         },
         SET_SNAKE_GROWING(state, snake_growing) {
             Vue.set(state.snake, 'growing', snake_growing);
+        },
+        SET_EGG_LOCATION(state, egg_location) {
+            Vue.set(state.egg, 'location', egg_location);
         },
         SET_GAME_STATUS(state, game_status) {
             Vue.set(state, 'game_status', game_status);
