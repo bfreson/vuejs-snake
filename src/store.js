@@ -25,10 +25,7 @@ function isValidLocation(columns, rows, snakeLocations, location) {
 
     if (snakeLocations.length === 0) return true;
 
-    return !snakeLocations.includes(loc => loc[0] === location[0] && loc[1] === location[1]);
-
-
-
+    return !snakeLocations.filter(loc => loc[0] == location[0] && loc[1] == location[1]).length > 0;
 }
 
 export default new Vuex.Store({
@@ -89,8 +86,13 @@ export default new Vuex.Store({
                 [columns - 2, row],
                 [columns - 3, row]
             ];
-            commit('SET_GAME_STATUS', 'Running');
+
+            commit('SET_CURRENT_SCORE', 0);
+            commit('RESET_SNAKE_ORIENTATION');
             commit('SET_SNAKE_LOCATION', snake_location);
+            commit('SET_GAME_STATUS', 'Running');
+
+
         },
         moveSnake({ commit, state }) {
             if (state.snake.location.length === 0) return;
@@ -138,6 +140,9 @@ export default new Vuex.Store({
         },
         SET_GRID_VISIBLE(state, grid_visible) {
             Vue.set(state, 'grid_visible', grid_visible);
+        },
+        RESET_SNAKE_ORIENTATION(state) {
+            Vue.set(state.snake, 'orientation', "Right");
         },
         SET_SNAKE_ORIENTATION(state, snake_orientation) {
             if (!isValidOrientation(state.snake.orientation, snake_orientation)) return;

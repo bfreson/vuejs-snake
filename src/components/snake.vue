@@ -1,5 +1,5 @@
 <template>
-<div v-show="snake_squares!==undefined" :style="{
+<div  v-show="snake_squares!==undefined" :style="{
        width: `${width}px`,
        height: `${height}px`,
        top: `${top}px`,

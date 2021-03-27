@@ -1,6 +1,10 @@
 <template>
 
-<div :width="width" class="display"> 
+<div :width="width" class="display"
+  v-on:keydown.up="move('Top')"
+        v-on:keydown.down="move('Bottom')"
+        v-on:keydown.left="move('Left')"
+        v-on:keydown.right="move('Right')"> 
   <div class="title py-3">
      <h1> VueJS - Snake</h1>
   </div>
@@ -35,7 +39,11 @@ export default {
    
   },
   methods: {
-    
+     move(orientation) {
+         console.log(orientation);
+        //  if(this.$store.game_status !== "Running") return;
+        //  this.$store.commit('SET_SNAKE_ORIENTATION', orientation);
+    },
   },
   created() {
    
