@@ -6,7 +6,6 @@
   </div>
   <GameStatus/>
   <Scene  :borderColor="{r:0, g:0, b:255}" />
- <Debug/>
    </div>
 
 </template>
@@ -14,14 +13,12 @@
 <script>
 import GameStatus from '@/components/GameStatus.vue';
 import Scene from '@/components/Scene.vue';
-import Debug from '@/components/Debug.vue';
 import {mapState} from 'vuex'
 
 export default {
   components: {
    GameStatus,
    Scene,
-   Debug
   },
   data() {
     return {
