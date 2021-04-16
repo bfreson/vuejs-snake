@@ -3,8 +3,8 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-function isValidOrientation(currentOrientation, newOrientation) {
-    switch (currentOrientation) {
+function isValidOrientation(lastOrientation, newOrientation) {
+    switch (lastOrientation) {
         case "Top":
             return newOrientation !== "Bottom";
         case "Bottom":
@@ -43,7 +43,7 @@ function getNewRandomEggLocation(columns, rows, snakeLocations) {
     let column = 0;
     let row = 0;
 
-    let ok = false;
+    let ok;
 
     do {
         column = randomIntFromInterval(1, columns);
@@ -62,12 +62,13 @@ export default new Vuex.Store({
         borderWidth: 15,
         width: 650,
         height: 650,
-        columns: 6,
-        rows: 6,
+        columns: 30,
+        rows: 30,
         grid_visible: false,
         game_status: 'None',
         snake: {
             orientation: 'Right',
+            lastOrientation: 'Right',
             location: [],
             growing: false
         },
@@ -157,6 +158,7 @@ export default new Vuex.Store({
             }
 
             commit('SET_SNAKE_LOCATION', snake_location);
+            commit('SET_SNAKE_LAST_ORIENTATION', state.snake.orientation);
 
             if (state.egg.location != null && nextHeadLocation[0] == state.egg.location[0] && nextHeadLocation[1] == state.egg.location[1]) {
                 dispatch('snakeGrows');
@@ -182,9 +184,12 @@ export default new Vuex.Store({
             Vue.set(state.snake, 'orientation', "Right");
         },
         SET_SNAKE_ORIENTATION(state, snake_orientation) {
-            if (!isValidOrientation(state.snake.orientation, snake_orientation)) return;
+            if (!isValidOrientation(state.snake.lastOrientation, snake_orientation)) return;
 
             Vue.set(state.snake, 'orientation', snake_orientation);
+        },
+        SET_SNAKE_LAST_ORIENTATION(state, snake_lastOrientation) {
+            Vue.set(state.snake, 'lastOrientation', snake_lastOrientation);
         },
         SET_SNAKE_LOCATION(state, snake_location) {
             Vue.set(state.snake, 'location', snake_location);

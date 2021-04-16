@@ -37,7 +37,7 @@ methods: {
 	StartInterval () {
 		this.interval = setInterval(() => {
 			  this.$store.dispatch('moveSnake');
-		}, 400)
+		}, 200)
           this.$refs.board.focus();
 	},
     StopInterval () {
