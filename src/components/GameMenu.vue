@@ -5,9 +5,10 @@
       height: `${height}px`,
       top: '0px',
       left: '0px'
-    }" class="start">
+    }" class="start" >
     <div :style="{'background-color': menu.color
-    }" class="action" @click="startNewgame">
+    }" class="action" ref="action"  @click="action" v-on:keydown.esc="action()" tabindex="0"
+    >
         {{this.menu.message}}
     </div>
 </div>
@@ -37,6 +38,11 @@ export default {
               message : "Game Over :(",
               color : "red"
             }
+           case 'Pause':
+            return {
+              message : "Pause",
+              color : "yellow"
+            }
           default:
             return {
               message : "Start new game",
@@ -50,14 +56,25 @@ export default {
    
   },
   methods: {
-      startNewgame()
+      action()
       {
-          this.$store.dispatch('startNewGame');
+        switch (this.game_status)
+        {
+           case 'GameOver':
+           case 'None':
+            this.$store.dispatch('startNewGame');
+            break;
+           case 'Pause':
+            this.$store.dispatch('continue');
+            break;
+        }
       }
-    
   },
-  created() {
-   
+  mounted() {
+    this.$refs.action.focus();
+  }, 
+  updated() {
+    this.$refs.action.focus();
   },
 };
 </script>
@@ -79,6 +96,7 @@ export default {
     overflow:hidden;
     white-space: nowrap;
     align-content: center;
+    outline: none;
     
 }
 </style>

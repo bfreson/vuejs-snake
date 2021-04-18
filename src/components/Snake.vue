@@ -116,7 +116,6 @@ export default {
     {
         if(this.snake.location.length > 0)
         {
-          //let snakeLocations = Object.assign({}, this.snake.location);
           let snakeLocations = this.setSnakeBorders(this.snake.location);
           let snakeQuares = snakeLocations.map((item, index) => {  return this.getSnakeSquare(index,item);  });
 

@@ -63,7 +63,7 @@ body{
 
 .display {
 
-   font-size:1rem !important;
+   font-size: 1rem !important;
   font-family: pokemon;
 }
 </style>

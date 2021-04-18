@@ -9,6 +9,7 @@
         v-on:keydown.down="move('Bottom')"
         v-on:keydown.left="move('Left')"
         v-on:keydown.right="move('Right')"
+        v-on:keydown.esc="askPause()"
     >
      <Grid v-show="grid_visible" :width="width" :height="height" :top="0" :left="0"/>
      <Snake v-show="gameLaunched" :width="width" :height="height" :top="0" :left="0"/>
@@ -30,28 +31,56 @@ export default {
   },
   data () {
 	return {
-		interval: null
+		gameTimer: null,
+        elapsedTimer: null
 	}
 },
 methods: {
-	StartInterval () {
-		this.interval = setInterval(() => {
-			  this.$store.dispatch('moveSnake');
-		}, 200)
-          this.$refs.board.focus();
+    pause(){
+        this.stopGameTimer();
+        this.stopElapsedInterval();
+    },
+    continue(){
+        this.startGameTimer();
+        this.startElapsedInterval();
+    },
+    startElapsedInterval(){
+        this.elapsedTimer = setInterval(() => {
+			  this.$store.commit('SET_ELAPSED_TIME',this.$store.state.elapsed_time +1);
+		}, 1000)
+    },
+    stopElapsedInterval(){
+        clearInterval(this.elapsedTimer)
+    },
+	startGameTimer () {
+        this.gameTimer = setTimeout(() => {
+              this.$store.dispatch('moveSnake');
+              this.startGameTimer();
+        }, this.getInterval());
+
+        this.$refs.board.focus();
 	},
-    StopInterval () {
-	    clearInterval(this.interval)
+    stopGameTimer () {
+        clearTimeout(this.gameTimer);
 	},
+    getInterval()
+    {
+        return 300 - (this.$store.state.game_speed * 10); 
+    },
     move(orientation) {
          if(this.$store.state.game_status !== "Running") return;
          this.$store.commit('SET_SNAKE_ORIENTATION', orientation);
     },
+    askPause(){
+         this.$store.dispatch('pause');
+    }
+},
+mounted() {
+     this.$store.dispatch('getScores');
 },
 beforeDestroy () {
-	this.StopInterval();
+	this.pause();
 },
-
   computed:
   {
      ...mapState({
@@ -67,14 +96,14 @@ beforeDestroy () {
            switch (this.$store.state.game_status)
            {
                case "Running":
-                    this.StartInterval();
+                    this.continue();
                     break;
                 case "GameOver":
-                   	this.StopInterval();
+                     this.$store.dispatch('saveScore',"bfr");
+                case "Pause":
+                   	this.pause();
                     break;
            }
-          
-
   }
    },
    props:

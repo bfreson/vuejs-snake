@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import mapSort from 'mapsort';
 
 Vue.use(Vuex);
 
@@ -44,7 +45,6 @@ function getNewRandomEggLocation(columns, rows, snakeLocations) {
     let row = 0;
 
     let ok;
-
     do {
         column = randomIntFromInterval(1, columns);
         row = randomIntFromInterval(1, rows);
@@ -55,9 +55,45 @@ function getNewRandomEggLocation(columns, rows, snakeLocations) {
     return [column, row];
 }
 
+function saveScoreToLocalStorage(scores) {
+    window.localStorage.setItem('scores', scores);
+}
+
+function getScoresFromLocalStorage() {
+    let scores = JSON.parse(window.localStorage.getItem('scores'));
+    if (scores === null) return null;
+
+    let sortedScores = mapSort(
+        scores,
+        element => {
+            return element;
+        },
+        (a, b) => {
+            if (a.score > b.score)
+                return -1;
+            if (b.score > a.score)
+                return 1;
+
+            if (a.time < b.score)
+                return -1;
+            if (b.score < a.score)
+                return 1;
+
+            if (a.date < b.date)
+                return -1;
+            if (b.date < a.date)
+                return 1;
+
+            return 0;
+        }
+    );
+    return sortedScores;
+}
+
 export default new Vuex.Store({
     state: {
         current_score: 0,
+        scores: [],
         best_score: 0,
         borderWidth: 15,
         width: 650,
@@ -66,6 +102,8 @@ export default new Vuex.Store({
         rows: 30,
         grid_visible: false,
         game_status: 'None',
+        game_speed: 1,
+        elapsed_time: 0,
         snake: {
             orientation: 'Right',
             lastOrientation: 'Right',
@@ -74,8 +112,8 @@ export default new Vuex.Store({
         },
         egg: {
             location: null
-        }
-
+        },
+        scores: null
     },
     getters: {
         board: state => {
@@ -103,10 +141,11 @@ export default new Vuex.Store({
         grid_visible: state => {
             return state.grid_visible;
         },
+        elapsed_time: state => {
+            return new Date(state.elapsed_time * 1000).toISOString().substr(14, 5);
+        }
     },
-
     actions: {
-
         startNewGame({ commit, state }) {
             let columns = state.columns / 2 + 1;
             let row = state.rows / 2;
@@ -123,7 +162,18 @@ export default new Vuex.Store({
             commit('SET_SNAKE_LOCATION', snake_location);
             commit('SET_EGG_LOCATION', getNewRandomEggLocation(state.columns, state.rows, state.snake.location));
             commit('SET_GAME_STATUS', 'Running');
+            commit('RESET_GAME_SPEED');
+            commit('RESET_ELAPSED_TIME');
 
+        },
+        pause({ commit, state }) {
+            if (state.game_status !== "Running") return;
+            commit('SET_GAME_STATUS', 'Pause');
+        },
+        continue ({ commit, state }) {
+            if (state.game_status !== "Pause") return;
+
+            commit('SET_GAME_STATUS', 'Running');
         },
         moveSnake({ commit, state, dispatch }) {
             if (state.snake.location.length === 0) return;
@@ -151,11 +201,10 @@ export default new Vuex.Store({
             let snake_location = state.snake.location;
             snake_location.unshift(nextHeadLocation);
 
-            if (state.snake.growing) {
+            if (state.snake.growing)
                 commit('SET_SNAKE_GROWING', false);
-            } else {
+            else
                 snake_location.pop();
-            }
 
             commit('SET_SNAKE_LOCATION', snake_location);
             commit('SET_SNAKE_LAST_ORIENTATION', state.snake.orientation);
@@ -163,17 +212,46 @@ export default new Vuex.Store({
             if (state.egg.location != null && nextHeadLocation[0] == state.egg.location[0] && nextHeadLocation[1] == state.egg.location[1]) {
                 dispatch('snakeGrows');
             }
-
-
         },
         snakeGrows({ commit, state }) {
             commit('SET_SNAKE_GROWING', true);
             commit('SET_CURRENT_SCORE', state.current_score + 1);
             commit('SET_EGG_LOCATION', getNewRandomEggLocation(state.columns, state.rows, state.snake.location));
+            if (state.game_speed < 20 && (state.current_score % 10) === 0) {
+                commit('SET_GAME_SPEED', state.game_speed + 1);
+            }
+        },
+        getScores({ commit }) {
+            let scores = getScoresFromLocalStorage();
+            commit('SET_SCORES', scores);
+            if (scores != null)
+                commit('SET_BEST_SCORE', scores[0].score);
         },
 
+        saveScore({ state, dispatch }, nickname) {
+            let score = {
+                nickname: nickname,
+                score: state.current_score,
+                time: state.elapsed_time,
+                date: new Date()
+            };
+            let scores = [];
+            if (state.scores != null)
+                scores = [...state.scores];
+            scores.push(score);
+
+            let data = JSON.stringify(scores);
+            saveScoreToLocalStorage(data);
+            dispatch('getScores');
+        }
     },
     mutations: {
+        SET_SCORES(state, scores) {
+            Vue.set(state, 'scores', scores);
+        },
+        SET_BEST_SCORE(state, best_score) {
+            Vue.set(state, 'best_score', best_score);
+        },
         SET_CURRENT_SCORE(state, current_score) {
             Vue.set(state, 'current_score', current_score);
         },
@@ -203,6 +281,17 @@ export default new Vuex.Store({
         SET_GAME_STATUS(state, game_status) {
             Vue.set(state, 'game_status', game_status);
         },
-
+        SET_GAME_SPEED(state, game_speed) {
+            Vue.set(state, 'game_speed', game_speed);
+        },
+        RESET_GAME_SPEED(state) {
+            Vue.set(state, 'game_speed', 1);
+        },
+        RESET_ELAPSED_TIME(state) {
+            Vue.set(state, 'elapsed_time', 0);
+        },
+        SET_ELAPSED_TIME(state, elapsed_time) {
+            Vue.set(state, 'elapsed_time', elapsed_time);
+        },
     },
 });
