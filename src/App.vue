@@ -1,13 +1,14 @@
 <template>
 
 <div :width="width" class="display" > 
-  <div  :style="{
+  <div :style="{
        'max-width': `${width}px`,
+       'max-height': `120px`
     }">
-    <div ref="title" class="title py-3">
-      <h1> VueJS - Snake</h1>
-    </div>
-    <GameStatus ref="status" />
+      <div ref="title" class="title py-3">
+        <h1> VueJS - Snake</h1>
+      </div>
+      <GameStatus ref="status" />
   </div>
   
   <Scene  :borderColor="{r:0, g:0, b:255}" />
@@ -46,7 +47,7 @@ export default {
       this.$store.commit('SET_HEIGHT', newHeight );
     }
   },
-  created() {
+  mounted() {
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
   },
@@ -68,7 +69,7 @@ body{
   justify-content: center;
 }
 h1 {
-    font-size: 3vw !important;
+    font-size: min(4vw,40px) !important;
 }
 .title{
   background-color: blue;
@@ -80,7 +81,7 @@ h1 {
   src: url(/fonts/pokemon-font.woff);
 }
 .display {
-  font-size: 1.4vw !important;
+  font-size: 1.4vmin !important;
   font-family: pokemon;
 }
 </style>
