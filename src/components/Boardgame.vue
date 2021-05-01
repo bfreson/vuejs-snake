@@ -5,11 +5,13 @@
       top: `${top}px`,
       left: `${left}px`,
     }" class="board"
-        v-on:keydown.up="move('Top')"
-        v-on:keydown.down="move('Bottom')"
+        v-on:keydown.up="move('Up')"
+        v-hammer:pan="pan"
+        v-on:keydown.down="move('Down')"
         v-on:keydown.left="move('Left')"
         v-on:keydown.right="move('Right')"
         v-on:keydown.esc="askPause()"
+        v-hammer:tap="tap"
     >
      <Grid v-show="grid_visible" :width="width" :height="height" :top="0" :left="0"/>
      <Snake v-show="gameLaunched" :width="width" :height="height" :top="0" :left="0"/>
@@ -69,7 +71,29 @@ methods: {
     },
     move(orientation) {
          if(this.$store.state.game_status !== "Running") return;
-         this.$store.commit('SET_SNAKE_ORIENTATION', orientation);
+            this.$store.commit('SET_SNAKE_ORIENTATION', orientation);
+    },
+    pan(e) {
+        switch(e.direction)
+        {
+            case 2:
+                this.move("Left");
+                break;
+            case 4:
+                this.move("Right");
+                break;
+            case 8:
+                this.move("Up");
+                break;
+            case 16:
+                this.move("Down");
+                break;
+        }
+    },
+    tap(e)
+    {
+        if (e.tapCount >1)
+            this.askPause();
     },
     askPause(){
          this.$store.dispatch('pause');

@@ -6,10 +6,10 @@ Vue.use(Vuex);
 
 function isValidOrientation(lastOrientation, newOrientation) {
     switch (lastOrientation) {
-        case "Top":
-            return newOrientation !== "Bottom";
-        case "Bottom":
-            return newOrientation !== "Top";
+        case "Up":
+            return newOrientation !== "Down";
+        case "Down":
+            return newOrientation !== "Up";
         case "Left":
             return newOrientation !== "Right";
         case "Right":
@@ -180,10 +180,10 @@ export default new Vuex.Store({
 
             var nextHeadLocation = {...state.snake.location[0] };
             switch (state.snake.orientation) {
-                case "Top":
+                case "Up":
                     nextHeadLocation[1] = nextHeadLocation[1] - 1;
                     break;
-                case "Bottom":
+                case "Down":
                     nextHeadLocation[1] = nextHeadLocation[1] + 1;
                     break;
                 case "Right":

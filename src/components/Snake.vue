@@ -67,15 +67,15 @@ export default {
 
         if(previousBlock !== null)
         {
-          borderTop= this.haveBorderAt("Top",currentBlock,previousBlock);
-          borderBottom= this.haveBorderAt("Bottom",currentBlock,previousBlock);
+          borderTop= this.haveBorderAt("Up",currentBlock,previousBlock);
+          borderBottom= this.haveBorderAt("Down",currentBlock,previousBlock);
           borderLeft= this.haveBorderAt("Left",currentBlock,previousBlock);
           borderRight= this.haveBorderAt("Right",currentBlock,previousBlock);
         }
         if(nextBlock !== null)
         {
-          borderTop= borderTop && this.haveBorderAt("Top",currentBlock, nextBlock);
-          borderBottom= borderBottom && this.haveBorderAt("Bottom",currentBlock, nextBlock);
+          borderTop= borderTop && this.haveBorderAt("Up",currentBlock, nextBlock);
+          borderBottom= borderBottom && this.haveBorderAt("Down",currentBlock, nextBlock);
           borderLeft= borderLeft && this.haveBorderAt("Left",currentBlock, nextBlock);
           borderRight= borderRight && this.haveBorderAt("Right",currentBlock, nextBlock);
         }
@@ -98,8 +98,8 @@ export default {
       if(blockA[0] === blockB[0])
       {
         if(blockA[1] -1  === blockB[1])
-          return "Top";
-        return "Bottom";
+          return "Up";
+        return "Down";
       }
       if(blockA[0] -1  === blockB[0])
         return "Left";

@@ -5,9 +5,14 @@
       height: `${height}px`,
       top: '0px',
       left: '0px'
-    }" class="start" >
-    <div :style="{'background-color': menu.color
-    }" class="action" ref="action"  @click="action" v-on:keydown.esc="action()" tabindex="0"
+    }" class="start" v-hammer:tap="tap" >
+    <div :style="{'background-color': menu.color }" 
+         class="action" 
+         ref="action"  
+         @click="action" 
+         v-on:keydown.esc="action()" 
+        
+         tabindex="0"
     >
         {{this.menu.message}}
     </div>
@@ -68,6 +73,11 @@ export default {
             this.$store.dispatch('continue');
             break;
         }
+      },
+      tap(e) 
+      {
+        if (e.tapCount >1)
+          this.action();
       }
   },
   mounted() {

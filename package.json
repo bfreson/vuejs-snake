@@ -13,6 +13,7 @@
         "jquery": "^3.6.0",
         "mapsort": "^1.0.4",
         "vue": "^2.5.22",
+        "vue2-hammer": "^2.1.2",
         "vuex": "^3.0.1"
     },
     "devDependencies": {
