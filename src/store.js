@@ -293,5 +293,11 @@ export default new Vuex.Store({
         SET_ELAPSED_TIME(state, elapsed_time) {
             Vue.set(state, 'elapsed_time', elapsed_time);
         },
+        SET_WIDTH(state, width) {
+            Vue.set(state, 'width', width);
+        },
+        SET_HEIGHT(state, height) {
+            Vue.set(state, 'height', height);
+        },
     },
 });

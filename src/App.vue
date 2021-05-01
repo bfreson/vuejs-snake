@@ -1,10 +1,15 @@
 <template>
 
 <div :width="width" class="display" > 
-  <div class="title py-3">
-     <h1> VueJS - Snake</h1>
+  <div  :style="{
+       'max-width': `${width}px`,
+    }">
+    <div ref="title" class="title py-3">
+      <h1> VueJS - Snake</h1>
+    </div>
+    <GameStatus ref="status" />
   </div>
-  <GameStatus/>
+  
   <Scene  :borderColor="{r:0, g:0, b:255}" />
    </div>
 
@@ -32,10 +37,21 @@ export default {
    
   },
   methods: {
-    
+    handleResize() {
+      let newWidth = window.innerWidth;
+      let newHeight = window.innerHeight - this.$refs.title.clientHeight - this.$refs.status.$el.clientHeight - 30;
+      if (newHeight < newWidth) newWidth = newHeight;
+      if (newWidth < newHeight) newHeight = newWidth;
+      this.$store.commit('SET_WIDTH', newWidth );
+      this.$store.commit('SET_HEIGHT', newHeight );
+    }
   },
   created() {
-   
+        window.addEventListener('resize', this.handleResize);
+        this.handleResize();
+  },
+    destroyed() {
+        window.removeEventListener('resize', this.handleResize);
   },
 };
 </script>
@@ -51,6 +67,9 @@ body{
   display: flex;
   justify-content: center;
 }
+h1 {
+    font-size: 3vw !important;
+}
 .title{
   background-color: blue;
   text-align: center;
@@ -60,10 +79,8 @@ body{
   font-family: pokemon;
   src: url(/fonts/pokemon-font.woff);
 }
-
 .display {
-
-   font-size: 1rem !important;
+  font-size: 1.4vw !important;
   font-family: pokemon;
 }
 </style>

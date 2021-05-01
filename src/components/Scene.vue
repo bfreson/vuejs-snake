@@ -31,8 +31,6 @@ export default {
      displayMenu() {
          return this.game_status !== "Running";
      }
-   
-      
   },
   props:
   {

@@ -1,5 +1,4 @@
 <template>
-<div class="container">
 <div class="row mt-1 mb-1">
     <div class="score ml-1 col ">
         Current score: {{current_score}}
@@ -13,9 +12,6 @@
          Best score: {{best_score}}
     </div>
 </div>
-
-</div>
-
 </template>
 
 <script>

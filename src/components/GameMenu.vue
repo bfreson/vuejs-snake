@@ -81,7 +81,6 @@ export default {
 
 <style scoped>
 .start {
-    
     color:blue;
     position: absolute;
     display: flex;
@@ -97,6 +96,5 @@ export default {
     white-space: nowrap;
     align-content: center;
     outline: none;
-    
 }
 </style>
